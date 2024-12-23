@@ -29,6 +29,7 @@ class PDOHandler extends AbstractProcessingHandler
 
         $arr = $record->toArray();
 
+        /** @noinspection SqlNoDataSourceInspection */
         $sql = "INSERT INTO $this->table_name (channel, level, levelName, message, context, extra, createdAt) VALUES (?,?,?,?,?,?,?)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
@@ -51,6 +52,7 @@ class PDOHandler extends AbstractProcessingHandler
     public function up(): void
     {
 
+        /** @noinspection SqlNoDataSourceInspection */
         $query = $this->pdo->prepare("CREATE TABLE IF NOT EXISTS $this->table_name (
                 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, 
                 `channel` VARCHAR(255), 
@@ -73,6 +75,7 @@ class PDOHandler extends AbstractProcessingHandler
      */
     public function down(): void
     {
+        /** @noinspection SqlNoDataSourceInspection */
         $query = $this->pdo->prepare("DROP TABLE IF EXISTS $this->table_name");
         $query->execute();
     }
