@@ -30,12 +30,12 @@ class PDOHandler extends AbstractProcessingHandler
         $arr = $record->toArray();
 
         /** @noinspection SqlNoDataSourceInspection */
-        $sql = "INSERT INTO $this->table_name (channel, level, levelName, message, context, extra, createdAt) VALUES (?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO $this->table_name (channel, level, level_name, message, context, extra, created_at) VALUES (?,?,?,?,?,?,?)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             $record->channel,
-            Arr::get($arr, 'level'),
-            Arr::get($arr, 'level_name'),
+            Arr::get($arr, 'level', 0),
+            Arr::get($arr, 'level_name', ''),
             $record->message,
             empty($record->context) ? null : json_encode($record->context),
             empty($record->extra) ? null : json_encode($record->extra),
@@ -57,11 +57,11 @@ class PDOHandler extends AbstractProcessingHandler
                 `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, 
                 `channel` VARCHAR(255), 
                 `level` INT(3),
-                `levelName` VARCHAR(10),
+                `level_name` VARCHAR(10),
                 `message` TEXT,
                 `context` JSON,
                 `extra` JSON,
-                `createdAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP()
+                `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP()
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 
         $query->execute();
